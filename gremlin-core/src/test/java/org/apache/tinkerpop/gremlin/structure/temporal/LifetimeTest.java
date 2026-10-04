@@ -105,7 +105,7 @@ public class LifetimeTest {
 
     @Test
     public void shouldReadLifetimeFromProperties() {
-        final Element element = elementWithProperties(new Date(1000L), new Date(2000L));
+        final Element element = elementWithProperties(1000L, 2000L);
 
         final Lifetime lifetime = Lifetime.fromProperties(element);
 
@@ -115,17 +115,17 @@ public class LifetimeTest {
     }
 
     @Test
-    public void shouldReadExtentFromTemporalIntervals() {
-        final Element element = elementWithProperties(new Date(5000L), new Date(6000L));
+    public void shouldReadBoundsDirectlyFromTheirProperties() {
+        final Element element = elementWithProperties(5000, 6000L);
         final Property<Object> intervalsProperty = property("1000:2000,3000:4000");
         when(element.property(Lifetime.TEMPORAL_INTERVALS)).thenReturn(intervalsProperty);
 
-        assertEquals(1000L, Lifetime.getStartTimeFromProperty(element));
-        assertEquals(4000L, Lifetime.getEndTimeFromProperty(element));
+        assertEquals(5000L, Lifetime.getStartTimeFromProperty(element));
+        assertEquals(6000L, Lifetime.getEndTimeFromProperty(element));
 
         final Element intervalsOnly = elementWithTemporalIntervals("1000:2000,3000:4000");
-        assertEquals(1000L, Lifetime.getStartTimeFromProperty(intervalsOnly));
-        assertEquals(4000L, Lifetime.getEndTimeFromProperty(intervalsOnly));
+        assertEquals(Long.MIN_VALUE, Lifetime.getStartTimeFromProperty(intervalsOnly));
+        assertEquals(Long.MAX_VALUE, Lifetime.getEndTimeFromProperty(intervalsOnly));
     }
 
     @Test
