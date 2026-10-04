@@ -53,7 +53,7 @@ public class GetEndTimeStepTest extends StepTest {
         when(element.property(Lifetime.END_TIME)).thenReturn(endTimeProperty);
         when(traverser.get()).thenReturn(element);
 
-        assertEquals(endTime, step.map(traverser));
+        assertEquals(Long.valueOf(endTime.getTime()), step.map(traverser));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class GetEndTimeStepTest extends StepTest {
         when(element.property(Lifetime.END_TIME)).thenReturn(Property.empty());
         when(traverser.get()).thenReturn(element);
 
-        assertEquals(Long.MAX_VALUE, step.map(traverser).getTime());
+        assertEquals(Long.valueOf(Long.MAX_VALUE), step.map(traverser));
     }
 
     private static <V> Property<V> property(final V value) {
